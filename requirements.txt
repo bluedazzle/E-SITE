@@ -1,0 +1,4 @@
+django==1.11.5
+Pillow
+yunpian-python-sdk==1.0.0
+DjangoUeditor

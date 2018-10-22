@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link href="https://cdn.bootcss.com/normalize/8.0.0/normalize.min.css" rel="stylesheet">
+    <title>会员中心</title>
+</head>
+<style>
+    body {
+        padding: 0 38px;
+    }
+    .header {
+        width: 100%;
+        text-align: center;
+    }
+    .header img {
+        width: 50px;
+        padding-bottom: 5px;
+        padding-top: 20px;
+    }
+    .header h2 {
+        font-weight: bold;
+        font-size: 24px;
+        letter-spacing: -0.6px;
+        text-align: center;
+        color: #303030;
+        line-height: normal;
+        margin: 0;
+    }
+
+    .form {
+        padding-top: 11px;
+    }
+    .form span {
+        padding-top: 25px;
+        font-size: 16px;
+        font-weight: 500;
+        font-style: normal;
+        font-stretch: normal;
+        line-height: normal;
+        letter-spacing: -0.7px;
+        color: #303030;
+        display: block;
+        padding-bottom: 10px;
+    }
+    .form input {
+        border: 0 none;
+        outline: 0 none;
+        border-bottom: 1px solid #4a4a4a;
+        font-size: 16px;
+        font-weight: 500;
+        font-style: normal;
+        font-stretch: normal;
+        line-height: normal;
+        letter-spacing: -0.7px;
+        color: #303030;
+        padding-bottom: 4px;
+        width: 100%;
+        border-radius: 0;
+        -webkit-appearance: none;
+        padding-left: 0;
+    }
+    .form .captcha {
+        width: 100%;
+        display: flex;
+        flex-direction: row;
+        align-items: flex-end;
+        justify-content: space-between;
+    }
+    .form .captcha button {
+        min-width: 114px;
+        height: 40px;
+        line-height: 40px;
+        border-radius: 23px;
+        background-image: linear-gradient(109deg, #fd6161, #fe224a);
+        font-size: 14px;
+        font-weight: 500;
+        font-style: normal;
+        font-stretch: normal;
+        letter-spacing: -0.6px;
+        color: #ffffff;
+        text-align: center;
+        border: 0 none;
+        outline: 0 none;
+    }
+    .submit {
+        height: 40px;
+        width: 100%;
+        margin-top: 54px;
+        line-height: 40px;
+        border-radius: 23px;
+        background-image: linear-gradient(98deg, #fd6161, #fe224a);
+        font-size: 14px;
+        font-weight: 500;
+        font-style: normal;
+        font-stretch: normal;
+        letter-spacing: -0.6px;
+        color: #ffffff;
+        text-align: center;
+        border: 0 none;
+        outline: 0 none;
+    }
+</style>
+<body>
+    <div class="header">
+        <img src="/static/site/img/logo.png" alt="中国石油">
+        <h2>中国石油青海销售分公司</h2>
+        <h2>会员注册</h2>
+    </div>
+    <form action="{% url 'register' %}" method="post">
+    <div class="form">
+        <span>加油卡卡号：</span>
+        <input type="text" id='no' name="cid" placeholder="请输入加油卡卡号"/>
+        <span>手机号：</span>
+        <input type="text" id='phone' name="mobile" placeholder="请输入手机号">
+        <span style="padding-bottom: 0">验证码：</span>
+        <div class="captcha">
+            <input type="text" id='captcha' name="code" placeholder="请输入验证码">
+            <button onclick="getCaptcha(this)" class="">获取验证码</button>
+        </div>
+    </div>
+
+    <button class="submit" type="submit">提交注册</button>
+    </form>
+</body>
+<script>
+  var countdown = 120; // 倒计时秒数
+  function getCaptcha(val) {
+    if (val.innerText === '获取验证码') sendCaptcha();
+    if (countdown === 0) {
+      val.removeAttribute("disabled");
+      val.innerText="获取验证码";
+      val.style.backgroundImage = 'linear-gradient(98deg, #fd6161, #fe224a)';
+      countdown = 120; // 倒计时秒数
+    } else {
+      val.style.backgroundImage = 'linear-gradient(98deg, #9b9b9b, #9b9b9b)';
+      val.setAttribute("disabled", true);
+      val.innerText="重新发送(" + countdown + ")";
+      countdown--;
+      setTimeout(function() {
+        getCaptcha(val);
+      }, 1000)
+    }
+
+  }
+
+  function sendCaptcha() {
+    var phone = document.getElementById('phone').value;
+    if (phone.length === 0) {
+      alert('请输入手机号码');
+    } else {
+      $.post("{% url 'sms' %}", {
+        'mobile': phone
+      }, function (res) {
+        console.log(res) // 这里是返回值，和后续操作
+      })
+    }
+  }
+</script>
+<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.js"></script>
+</html>

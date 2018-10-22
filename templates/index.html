@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<link href="https://cdn.bootcss.com/normalize/8.0.0/normalize.min.css" rel="stylesheet">
+	<title>会员中心</title>
+</head>
+<style>
+	.banner {
+		width: 100%;
+		object-fit: cover;
+	}
+	.menu {
+		padding-top: 67px;
+	}
+	.menu .row {
+		display: flex;
+		flex-direction: row;
+		align-items: center;
+		justify-content: center;
+		margin-bottom: 15px;
+	}
+	.menu .row .item {
+		border-radius: 6px;
+		border: solid 1px #fd6161;
+		width: 42%;
+		height: 80px;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+	}
+	.menu .row .left {
+		margin-right: 15px;
+	}
+	.menu .row .item span {
+		font-size: 14px;
+		font-weight: 500;
+		font-style: normal;
+		font-stretch: normal;
+		line-height: normal;
+		letter-spacing: -0.6px;
+		color: #fe234a;
+		padding-left: 5px;
+	}
+	.menu .row .item img {
+		width: 24px;
+	}
+	.sign {
+		width: 55px;
+		float: right;
+		padding-right: 20px;
+	}
+</style>
+<body>
+	<img src="/static/site/img/banner.png" alt="会员中心" class="banner">
+	<div class="menu">
+		<div class="row">
+			<div class="item left" onclick="window.location.href='{% url 'shop' %}'">
+				<img src="/static/site/img/icons8-shop.png" alt="shop">
+				<span>商铺查询</span>
+			</div>
+			<div class="item" onclick="window.location.href='{% url 'station' %}'">
+				<img src="/static/site/img/icons8-gas_station.png" alt="gas_station">
+				<span>站点查询</span>
+			</div>
+		</div>
+		<div class="row">
+			<div class="item left" onclick="window.location.href='{% url 'intro' %}'">
+				<img src="/static/site/img/icons8-bank_cards.png" alt="cards">
+				<span>加油卡介绍</span>
+			</div>
+			<div class="item" onclick="window.location.href='{% url 'question' %}'">
+				<img src="/static/site/img/icons8-talk.png" alt="talk">
+				<span>在线答疑</span>
+			</div>
+		</div>
+	</div>
+	<img src="/static/site/img/sign.png" alt="签到" class="sign" onclick="window.location.href='{% url 'signin' %}'">
+</body>
+</html>

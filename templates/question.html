@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<link href="https://cdn.bootcss.com/normalize/8.0.0/normalize.min.css" rel="stylesheet">
+	<title>会员中心</title>
+</head>
+<style>
+	body {
+		padding: 34px 21px;
+	}
+	.question {
+		padding-bottom: 37px;
+	}
+	img {
+		width: 100%;
+	}
+	h5 {
+		font-size: 14px;
+		font-weight: bold;
+		font-style: normal;
+		font-stretch: normal;
+		line-height: normal;
+		letter-spacing: -0.6px;
+		color: #303030;
+		margin: 0;
+		padding-bottom: 10px;
+	}
+	p {
+		font-size: 12px;
+		font-weight: 500;
+		font-style: normal;
+		font-stretch: normal;
+		line-height: normal;
+		letter-spacing: -0.5px;
+		color: #303030;
+		margin: 0;
+	}
+	.submit {
+		width: 100%;
+		padding-top: 20px;
+	}
+	.submit div {
+		height: 40px;
+		border-radius: 23px;
+		background-image: linear-gradient(98deg, #fd6161, #fe224a);
+		font-size: 14px;
+		font-weight: 500;
+		font-style: normal;
+		font-stretch: normal;
+		letter-spacing: -0.6px;
+		text-align: center;
+		width: 80%;
+		margin: 0 auto;
+	}
+	.submit div a {
+		color: #fff;
+		text-decoration: none;
+		text-align: center;
+		line-height: 40px;
+		width: 100%;
+		display: inline-block;
+	}
+</style>
+<body>
+	<h2>常见问题</h2>
+	<div class="question">
+                {% for item in data %}
+		<h5>{{ item.que }}</h5>
+                {% autoescape off %}
+		{{ item.ans }}
+                {% endautoescape %}
+                {% endfor %}
+	</div>
+	<div class="submit">
+		<div>
+			<a href="tel: 95504">联系客服人员</a>
+		</div>
+	</div>
+</body>
+</html>

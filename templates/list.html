@@ -1,0 +1,188 @@
+<!Doctype html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="initial-scale=1.0, user-scalable=no, width=device-width">
+	<title>会员中心</title>
+	<link rel="stylesheet" href="https://cache.amap.com/lbs/static/main1119.css"/>
+	<script type="text/javascript" src="https://webapi.amap.com/maps?v=1.4.9&key=0031ea5d57982290614d1731030064e0"></script>
+	<script src="//webapi.amap.com/ui/1.0/main.js"></script>
+	<script type="text/javascript" src="https://cache.amap.com/lbs/static/addToolbar.js"></script>
+	<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.js"></script>
+</head>
+<style>
+	#container {
+		height: 347px !important;
+	}
+	#tip {
+		display: none;
+	}
+	.amap-logo, .amap-copyright, .amap-info-close {
+		display: none !important;
+	}
+	.amap-simple-marker-label {
+		color: #fff;
+	}
+	.amap-info-content {
+		padding: 10px !important;
+	}
+	.list {
+		text-align: center;
+		width: 100%;
+		padding-top: 347px;
+	}
+	.list img {
+		height: 10px;
+		padding-top: 10px;
+	}
+	.list .item {
+		padding: 20px;
+	}
+	.list .item a {
+		text-decoration: none;
+		display: flex;
+		align-items: center;
+		flex-direction: row;
+		justify-content: space-between;
+	}
+	.list .item .name {
+		font-size: 18px;
+		font-weight: 500;
+		font-style: normal;
+		font-stretch: normal;
+		line-height: normal;
+		letter-spacing: -0.8px;
+		color: #303030;
+	}
+	.list .item .distance {
+		font-size: 14px;
+		font-weight: 500;
+		font-style: normal;
+		font-stretch: normal;
+		line-height: normal;
+		letter-spacing: -0.6px;
+		text-align: right;
+		color: #9b9b9b;
+	}
+</style>
+<body>
+<div id='container'></div>
+<div id="tip"><!--仅调试使用，生产环境 display:none--></div>
+<div class="list" id="list">
+	<img src="/static/site/img/arrow.png" alt="arrow">
+</div>
+<body>
+<script type="text/javascript">
+  /***************************************
+   由于Chrome、IOS10等已不再支持非安全域的浏览器定位请求，为保证定位成功率和精度，请尽快升级您的站点到HTTPS。
+   ***************************************/
+  var map, geolocation;
+  //加载地图，调用浏览器定位服务
+  map = new AMap.Map('container', {
+    resizeEnable: true,
+    zoom: 10,
+  });
+  map.setFeatures(['road','point', 'building']);
+  map.plugin('AMap.Geolocation', function() {
+    geolocation = new AMap.Geolocation({
+      enableHighAccuracy: true,//是否使用高精度定位，默认:true
+      timeout: 10000,          //超过10秒后停止定位，默认：无穷大
+      buttonOffset: new AMap.Pixel(10, 20),//定位按钮与设置的停靠位置的偏移量，默认：Pixel(10, 20)
+      zoomToAccuracy: false,      //定位成功后调整地图视野范围使定位位置及精度范围视野内可见，默认：false
+      buttonPosition:'LB'
+    });
+    map.addControl(geolocation);
+    geolocation.getCurrentPosition();
+    AMap.event.addListener(geolocation, 'complete', onComplete); //返回定位信息
+    AMap.event.addListener(geolocation, 'error', onError);       //返回定位出错信息
+  });
+
+  //解析定位结果
+  function onComplete(data) {
+    var str=['定位成功'];
+    str.push('经度：' + data.position.getLng()); // 经度
+    str.push('纬度：' + data.position.getLat()); // 纬度
+    if(data.accuracy){
+      str.push('精度：' + data.accuracy + ' 米');
+    } // 如为IP精确定位结果则没有精度信息
+    str.push('是否经过偏移：' + (data.isConverted ? '是' : '否'));
+    document.getElementById('tip').innerHTML = str.join('<br>');
+
+    $(document).ready(function () { renderSiteData([data.position.getLng(), data.position.getLat()]);})
+  }
+
+	// 解析定位错误信息
+  function onError(data) {
+    document.getElementById('tip').innerHTML = '定位失败' + data;
+  }
+
+  // 在指定位置打开信息窗体
+  function openInfo(lng, lat, item) {
+    //构建信息窗体中显示的内容
+    var info = ['<h4 style="margin: 0">' + item.name + '</h4>', item.address, '电话：'+item.tel, ];
+    var infoWindow = new AMap.InfoWindow({
+      content: info.join("<br/>"),  //使用默认信息窗体框样式，显示信息内容
+      offset: new AMap.Pixel(0, -28)
+    });
+    var position = new AMap.LngLat(lng, lat);
+    infoWindow.open(map, position);
+  }
+
+  var compareDistance = function (obj1, obj2) {
+  	var val1 = obj1.distance;
+    var val2 = obj2.distance;
+    if (val1 < val2) {
+        return -1;
+    } else if (val1 > val2) {
+        return 1;
+    } else {
+        return 0;
+    }            
+  }
+
+  function renderSiteData(position) {
+  	$.get('{% url 'mapdata' %}', function(result) {
+  		if (result.status === 'OK') {
+  			renderMap(result.msg);
+  			var data = result.msg.map(function(item) {
+  				var sitePosition = [item.longitude, item.latitude];
+  				var distance = AMap.GeometryUtil.distanceOfLine([position, sitePosition]);
+  				item.distance = distance;
+  				return item;
+  			})
+  			var sortedData = data.sort(compareDistance);
+  			sortedData.forEach(function(item, index) {
+  				var no = index + 1;
+  				var node = 
+	'<div class="item"><a href="/detail/?id=' + item.id + '&distance=' + (item.distance/1000).toFixed(2) + '">' + no + '. ' + item.name + '</span><span class="distance">距您' + (item.distance/1000).toFixed(2) + 'km</span></a></div>';
+				$('#list').append(node);
+  			});
+  		} else {
+  			alert('数据获取失败，请联系工作人员')
+  		}
+	})
+  }
+
+  function renderMap(data) {
+  	data.forEach(function(item) {
+		AMap.convertFrom([item.longitude, item.latitude], 'baidu', function(status, result) {
+			console.log(result);
+			var marker = new AMap.Marker({
+		        position: new AMap.LngLat(result.locations[0].lng, result.locations[0].lat), // 传入的是定位位置的经纬度
+		    	icon: new AMap.Icon({
+			    	size: new AMap.Size(19, 28),    // 图标尺寸
+			    	image: '/static/site/img/LOGOdb.png',  // Icon的图像
+			    	imageSize: new AMap.Size(19, 28)   // 根据所设置的大小拉伸或压缩图片
+				}),
+		    	title: item.name,
+		    	zoom: 13,
+			});
+			marker.on('click', function(){openInfo(result.locations[0].lng, result.locations[0].lat, item)})
+			map.add(marker);
+		});
+  	})
+  }
+</script>
+</body>
+</html>

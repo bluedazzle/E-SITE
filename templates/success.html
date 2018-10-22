@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<link href="https://cdn.bootcss.com/normalize/8.0.0/normalize.min.css" rel="stylesheet">
+	<title>会员中心</title>
+</head>
+<style>
+	body {
+		text-align: center;
+		padding: 41px 38px;
+	}
+	.card-wrapper {
+		position: relative;
+	}
+	.card-wrapper img {
+		width: 100%;
+	}
+	.card-text {
+		position: absolute;
+		top: 50%;
+		margin-top: -38px;
+		width: 100%;
+		text-align: center;
+	}
+	.card-text h2 {
+		font-size: 36px;
+		font-weight: bold;
+		font-style: normal;
+		font-stretch: normal;
+		line-height: normal;
+		letter-spacing: -0.6px;
+		color: #303030;
+		margin: 0;
+		padding-bottom: 6px;
+	}
+	.card-text p, .card-text span {
+		font-size: 14px;
+		font-weight: 500;
+		font-style: normal;
+		font-stretch: normal;
+		line-height: normal;
+		letter-spacing: -0.6px;
+		color: #303030;
+		margin: 0;
+	}
+	.congratulation {
+		font-size: 20px;
+		font-weight: bold;
+		font-style: normal;
+		font-stretch: normal;
+		line-height: normal;
+		letter-spacing: -0.5px;
+		text-align: center;
+		color: #fe234a;
+		padding-top: 69px;
+	}
+	.submit {
+		width: 100%;
+		position: absolute;
+		bottom: 80px;
+		left: 0;
+	}
+	.submit div {
+		height: 40px;
+		line-height: 40px;
+		border-radius: 23px;
+		background-image: linear-gradient(98deg, #fd6161, #fe224a);
+		font-size: 14px;
+		font-weight: 500;
+		font-style: normal;
+		font-stretch: normal;
+		letter-spacing: -0.6px;
+		color: #ffffff;
+		text-align: center;
+		width: 80%;
+		margin: 0 auto;
+	}
+</style>
+<body>
+	<div class="card-wrapper">
+		<img src="/static/site/img/card.png" alt="会员卡">
+	</div>
+	<h2 class="congratulation">恭喜成为我们的会员用户！</h2>
+	<div class="submit" onclick="window.location.href='{% url 'index' %}'">
+		<div>立即体验</div>
+	</div>
+</body>
+</html>

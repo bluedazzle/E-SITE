@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<link href="https://cdn.bootcss.com/normalize/8.0.0/normalize.min.css" rel="stylesheet">
+	<title>会员中心</title>
+</head>
+<style>
+	img {
+		width: 100%;
+		object-fit: cover;
+	}
+	h3 {
+		font-size: 24px;
+		font-weight: bold;
+		font-style: normal;
+		font-stretch: normal;
+		line-height: normal;
+		letter-spacing: -1px;
+		color: #303030;
+		margin: 0;
+		padding-left: 20px;
+		padding-top: 10px;
+	}
+	p {
+		margin: 0;
+	}
+	.address {
+		font-size: 14px;
+		font-weight: 500;
+		font-style: normal;
+		font-stretch: normal;
+		line-height: normal;
+		letter-spacing: -0.6px;
+		color: #9b9b9b;
+		padding-left: 20px;
+	}
+	.price {
+		text-align: center;
+		padding-top: 51px;
+	}
+	.price h3 {
+		padding-left: 0;
+		padding-bottom: 23px;
+	}
+	.price .rows {
+		display: flex;
+		align-items: center;
+		flex-direction: row;
+		justify-content: space-around;
+		padding: 20px;
+	}
+	.price .rows .gas {
+		margin-right: 15px;
+	}
+	.price .rows .gas, .price .rows .diesel {
+		border-radius: 6px;
+		background-color: #fafafa;
+		border: solid 1px #ff8d8e;
+		position: relative;
+		text-align: center;
+		padding: 20px 5px;
+	}
+	.price .rows div span {
+		position: absolute;
+		top: -10px;
+		border-radius: 12px;
+		background-image: linear-gradient(109deg, #fd6161, #fe224a);
+		padding: 0 19px;
+		font-size: 14px;
+		font-weight: bold;
+		font-style: normal;
+		font-stretch: normal;
+		line-height: normal;
+		letter-spacing: -0.6px;
+		text-align: center;
+		color: #ffffff;
+		left: calc(50% - 32px);
+	}
+	.price .rows p {
+		font-size: 12px;
+		font-weight: 500;
+		font-style: normal;
+		font-stretch: normal;
+		line-height: normal;
+		letter-spacing: -0.5px;
+		color: #303030;
+		padding-bottom: 9px;
+	}
+</style>
+<body>
+	<img src="/static/site/img/back.png" alt="加油站" />
+	<h3 id="name">{{ name }}</h3>
+        <div>
+            <div style="display: inline-block; vertical-align: top; width:70%;">
+	    <p class="address" id="address">{{ address }}</p>
+	    <p class="address" id="distance">距您{{ distance }}km</p>
+            </div>
+            <div style="display: inline-block; vertical-align: top; float: right; margin-right: 20px; border: solid 1px #ff8d8e; border-radius: 6px;">
+		<div style="font-size: 12px; text-align: center; border-bottom: solid 1px #ff8d8e; padding: 2px 5px;">充值站点</div>
+		<div style="color: #ff8d8e; font-size: 14px; text-align: center; padding: 2px;">{% if is_recharge %} 是 {% else %} 否 {% endif %}</div>
+	    </div>
+        </div>
+	<div class="price">
+		<h3>油价详情</h3>
+		<div class="rows">
+			<div class="gas">
+				<span>汽油</span>
+				<div>
+					{% for gas in gas_list %}
+					<p>{{ gas.name }}：{{ gas.price }}元/升</p>
+					{% endfor %}
+				</div>
+			</div>
+			<div class="diesel">
+				<span>柴油</span>
+				<div>
+					{% for diesel in diesel_list %}
+					<p>{{ diesel.name }}：{{ diesel.price }}元/升</p>
+					{% endfor %}
+				</div>
+			</div>
+		</div>
+	</div>
+</body>
+</html>
